@@ -201,7 +201,7 @@
         </div>
       </div>
       <div class="actions">
-        <a class="btn btn-primary" id="rsvp" href="#" target="_blank" rel="noopener">♡ Confirmar presença</a>
+        <a class="btn btn-primary" id="rsvp" href="#rsvpSection">♡ Confirmar presença</a>
         <a class="btn btn-secondary" id="mapLink" href="#" target="_blank" rel="noopener" hidden>⌖ Ver localização</a>
       </div>
       <p class="closing" id="closing">Esperamos você para celebrar conosco! ♡</p>
@@ -264,7 +264,7 @@
     <section class="extra-section" id="parentsSection">
       <p class="extra-kicker">Com todo nosso carinho</p>
       <h3 id="parentsTitle">Uma mensagem dos papais</h3>
-      <p class="parents-note" id="parentsMessage">“Estamos vivendo uma das fases mais especiais das nossas vidas. Será ainda mais bonito dividir essa alegria com você.”</p>
+      <p class="parents-note" id="parentsPublicMessage">“Estamos vivendo uma das fases mais especiais das nossas vidas. Será ainda mais bonito dividir essa alegria com você.”</p>
     </section>
 
     <section class="feature-section" id="giftsSection" hidden>
@@ -429,7 +429,7 @@
     $("ultrasoundTitle").textContent = CONTEUDO_ESPECIAL.tituloUltrassom;
     $("ultrasoundText").textContent = CONTEUDO_ESPECIAL.textoUltrassom;
     $("parentsTitle").textContent = CONTEUDO_ESPECIAL.tituloPais;
-    $("parentsMessage").textContent = CONTEUDO_ESPECIAL.mensagemPais;
+    $("parentsPublicMessage").textContent = CONTEUDO_ESPECIAL.mensagemPais;
     renderPhotoGallery("familyGallery", CONTEUDO_ESPECIAL.fotosFamilia);
     renderPhotoGallery("ultrasoundGallery", CONTEUDO_ESPECIAL.ultrassons);
     CONTEUDO_ESPECIAL.momentos.forEach((moment) => {
@@ -611,10 +611,7 @@
     });
 
     const phone = (CONVITE.whatsapp || "").replace(/\D/g, "");
-    $("rsvp").href = phone
-      ? "https://wa.me/" + phone + "?text=" + encodeURIComponent(CONVITE.mensagemWhatsApp)
-      : "#";
-    if (!phone) $("rsvp").hidden = true;
+    $("rsvp").href = "#rsvpSection";
     if (CONVITE.mapaURL) $("mapLink").href = CONVITE.mapaURL;
     else $("mapLink").hidden = true;
 
