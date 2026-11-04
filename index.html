@@ -147,9 +147,12 @@
     .gift-category{margin-top:22px;text-align:left}
     .gift-category h4{font:500 1.18rem "Playfair Display",serif;color:#725746;margin:0 0 10px}
     .gift-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-    .gift-choice{display:flex;gap:9px;align-items:flex-start;padding:12px;background:#f7f0e8;border:1px solid transparent;border-radius:11px;cursor:pointer;min-height:62px}
-    .gift-choice:has(input:checked){border-color:#9c8069;background:#efe3d6}
-    .gift-choice input{accent-color:#687d68;margin-top:3px}
+    .gift-choice{display:grid;grid-template-columns:minmax(0,1fr) 66px;gap:8px;align-items:center;padding:10px;background:#f7f0e8;border:1px solid transparent;border-radius:11px;min-height:66px;transition:border-color .2s,background .2s}
+    .gift-choice:has(input[type=checkbox]:checked){border-color:#9c8069;background:#efe3d6}
+    .gift-choice-select{display:flex;gap:9px;align-items:flex-start;min-width:0;cursor:pointer}
+    .gift-choice-select input{accent-color:#687d68;margin-top:3px;flex:0 0 auto}
+    .gift-quantity{width:66px;height:38px;border:1px solid #d9c6b4;border-radius:8px;background:#fffaf4;color:#5e4e42;padding:0 6px;font:600 .8rem "DM Sans",sans-serif;text-align:center}
+    .gift-quantity:disabled{opacity:.4;background:#eee7df}
     .gift-choice strong{display:block;font-size:.78rem;color:#5e4e42}
     .gift-choice small{display:block;font-size:.67rem;color:#8e7d70;margin-top:3px}
     .size-picker{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 18px}
@@ -196,6 +199,9 @@
     .size-picker{gap:10px;margin:16px 0 22px}
     .size-picker span{min-width:58px;height:52px;border-radius:13px;font-size:.88rem;font-weight:700}
     .size-picker input:focus-visible+span{outline:3px solid #b58e73;outline-offset:3px}
+    .diaper-quantity-label{display:flex;align-items:center;justify-content:center;gap:12px;color:#725746;font-size:.76rem;font-weight:700}
+    .diaper-quantity-label input{width:72px;height:42px;border:1px solid #d9c6b4;border-radius:9px;background:#fffaf4;color:#5e4e42;text-align:center;font:600 .85rem "DM Sans",sans-serif}
+    .diaper-quantity-label input:disabled{opacity:.45}
     .gift-category h4{padding-bottom:9px;border-bottom:1px solid #eaded1}
     #selectedGifts{margin-top:18px;border:1px dashed #d7c2ad;background:#fbf6ef}
     #rsvpSection{scroll-margin-top:85px}
@@ -368,6 +374,9 @@
         <label><input type="radio" name="diaperSize" value="G"><span>G</span></label>
         <label><input type="radio" name="diaperSize" value="XG"><span>XG</span></label>
       </div>
+      <label class="diaper-quantity-label" for="diaperQuantity">Quantidade de pacotes
+        <input id="diaperQuantity" type="number" min="1" max="20" value="1" inputmode="numeric" disabled>
+      </label>
       <div id="giftCatalog"></div>
       <p class="selected-gifts" id="selectedGifts">Nenhum presente selecionado até agora.</p>
     </section>
@@ -652,6 +661,7 @@
     $("eventStripDate").textContent = CONVITE.dataTexto || "DATA A DEFINIR";
     $("eventStripTime").textContent = CONVITE.horario || "HORÁRIO A DEFINIR";
     const selectedGiftNames = new Set();
+    const selectedGiftQuantities = new Map();
     const catalog = $("giftCatalog");
     (CONTEUDO_ESPECIAL.presentes || []).forEach((group, index) => {
       const section = document.createElement("section");
@@ -661,14 +671,22 @@
       const grid = document.createElement("div");
       grid.className = "gift-choice-grid";
       (group.itens || []).forEach((gift) => {
-        const label = document.createElement("label");
+        const label = document.createElement("div");
         label.className = "gift-choice";
+        const selectLabel = document.createElement("label");
+        selectLabel.className = "gift-choice-select";
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.value = gift;
         checkbox.addEventListener("change", () => {
-          if (checkbox.checked) selectedGiftNames.add(gift);
-          else selectedGiftNames.delete(gift);
+          if (checkbox.checked) {
+            selectedGiftNames.add(gift);
+            selectedGiftQuantities.set(gift, 1);
+          } else {
+            selectedGiftNames.delete(gift);
+            selectedGiftQuantities.delete(gift);
+          }
+          quantity.disabled = !checkbox.checked;
           updateGiftSummary();
         });
         const textWrap = document.createElement("span");
@@ -677,7 +695,22 @@
         const note = document.createElement("small");
         note.textContent = "Toque para selecionar";
         textWrap.append(title, note);
-        label.append(checkbox, textWrap);
+        selectLabel.append(checkbox, textWrap);
+        const quantity = document.createElement("input");
+        quantity.className = "gift-quantity";
+        quantity.type = "number";
+        quantity.min = "1";
+        quantity.max = "20";
+        quantity.value = "1";
+        quantity.disabled = true;
+        quantity.inputMode = "numeric";
+        quantity.setAttribute("aria-label", "Quantidade de " + gift);
+        quantity.addEventListener("change", () => {
+          quantity.value = String(Math.min(20, Math.max(1, Number(quantity.value) || 1)));
+          selectedGiftQuantities.set(gift, Number(quantity.value));
+          updateGiftSummary();
+        });
+        label.append(selectLabel, quantity);
         grid.appendChild(label);
       });
       section.append(heading, grid);
@@ -685,15 +718,23 @@
     });
     function updateGiftSummary() {
       const size = document.querySelector('input[name="diaperSize"]:checked')?.value;
-      const selected = [...selectedGiftNames];
+      const diaperQuantity = Math.min(20, Math.max(1, Number($("diaperQuantity").value) || 1));
+      const selected = [...selectedGiftNames].map(name => name + " × " + (selectedGiftQuantities.get(name) || 1));
       const parts = [];
-      if (size) parts.push("Fralda tamanho " + size);
+      if (size) parts.push("Fralda tamanho " + size + " × " + diaperQuantity + " pacote(s)");
       parts.push(...selected);
       $("selectedGifts").textContent = parts.length
         ? "Sua seleção: " + parts.join(" • ")
         : "Nenhum presente selecionado até agora.";
     }
-    document.querySelectorAll('input[name="diaperSize"]').forEach((input) => input.addEventListener("change", updateGiftSummary));
+    document.querySelectorAll('input[name="diaperSize"]').forEach((input) => input.addEventListener("change", () => {
+      $("diaperQuantity").disabled = !document.querySelector('input[name="diaperSize"]:checked');
+      updateGiftSummary();
+    }));
+    $("diaperQuantity").addEventListener("change", () => {
+      $("diaperQuantity").value = String(Math.min(20, Math.max(1, Number($("diaperQuantity").value) || 1)));
+      updateGiftSummary();
+    });
     if ((CONTEUDO_ESPECIAL.presentes || []).length) $("giftsSection").hidden = false;
 
     $("rsvpForm").addEventListener("submit", (event) => {
@@ -707,10 +748,11 @@
       const guestPhone = $("guestPhone").value.trim();
       const attendance = document.querySelector('input[name="attendance"]:checked')?.value;
       const size = document.querySelector('input[name="diaperSize"]:checked')?.value;
+      const diaperQuantity = Math.min(20, Math.max(1, Number($("diaperQuantity").value) || 1));
       const gifts = [...selectedGiftNames];
       const presentLines = [];
-      if (size) presentLines.push("Fralda tamanho " + size);
-      presentLines.push(...gifts);
+      if (size) presentLines.push("Fralda tamanho " + size + " — " + diaperQuantity + " pacote(s)");
+      gifts.forEach(gift => presentLines.push(gift + " — quantidade: " + (selectedGiftQuantities.get(gift) || 1)));
       const message = [
         "Olá! Aqui é " + guest + ".",
         guestPhone ? "Meu telefone para contato: " + guestPhone : "",
