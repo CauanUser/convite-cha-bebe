@@ -169,6 +169,7 @@
     .attendance label{padding:13px;border:1px solid #d9c6b4;border-radius:10px;display:flex;gap:8px;align-items:center;font-size:.78rem;color:#6c5a4d;cursor:pointer}
     .attendance input{accent-color:#687d68}
     .selected-gifts{padding:12px;background:#f7f0e8;border-radius:10px;font-size:.75rem;line-height:1.6;color:#796b60}
+    .privacy-note{max-width:460px;margin:12px auto 0;color:#988777;font-size:.68rem;line-height:1.6;text-align:center}
     .rsvp-submit{width:100%;border:0;cursor:pointer}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
@@ -206,7 +207,7 @@
     #selectedGifts{margin-top:18px;border:1px dashed #d7c2ad;background:#fbf6ef}
     #rsvpSection{scroll-margin-top:85px}
     #details,#memories,#giftsSection{scroll-margin-top:84px}
-    @media(max-width:560px){.quick-nav{top:5px;gap:3px;padding:5px;border-radius:16px}.quick-nav a{font-size:.66rem;padding:10px 3px}.diaper-note{font-size:.72rem}.size-picker span{min-width:54px}}
+    @media(max-width:560px){.quick-nav{top:5px;gap:3px;padding:5px;border-radius:16px}.quick-nav a{font-size:.66rem;padding:10px 3px}.diaper-note{font-size:.72rem}.size-picker span{min-width:54px}.gift-choice-grid{grid-template-columns:1fr}.gift-choice{grid-template-columns:minmax(0,1fr) 70px}}
 
 
     /* ABERTURA CINEMATOGRÁFICA — Samuel Felipe */
@@ -378,7 +379,7 @@
         <input id="diaperQuantity" type="number" min="1" max="20" value="1" inputmode="numeric" disabled>
       </label>
       <div id="giftCatalog"></div>
-      <p class="selected-gifts" id="selectedGifts">Nenhum presente selecionado até agora.</p>
+      <p class="selected-gifts" id="selectedGifts" aria-live="polite">Nenhum presente selecionado até agora.</p>
     </section>
     <section class="feature-section" id="rsvpSection">
       <p class="extra-kicker">O último detalhe</p>
@@ -398,6 +399,7 @@
           </div>
         </div>
         <button class="btn btn-primary rsvp-submit" type="submit">♡ Confirmar pelo WhatsApp</button>
+        <p class="privacy-note">Ao confirmar, o WhatsApp será aberto com a mensagem pronta. Você só precisa tocar em “Enviar”. Este convite não armazena suas respostas.</p>
       </form>
     </section>
     <section class="feature-section" id="giftSuggestionsSection" hidden>
