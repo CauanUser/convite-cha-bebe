@@ -673,11 +673,13 @@
       $("giftLink").href = CONVITE.listaPresentesURL;
       $("giftLink").classList.add("show");
     }
-\n    const envelope = $("envelope");
+
+    const envelope = $("envelope");
     function openLetter() {
       if (envelope.classList.contains("open")) return;
       envelope.classList.add("open");
-      window.setTimeout(() => $("details").classList.add("visible"), 650);\n      window.setTimeout(() => $("memories").classList.add("visible"), 900);
+      window.setTimeout(() => $("details").classList.add("visible"), 650);
+      window.setTimeout(() => $("memories").classList.add("visible"), 900);
       window.setTimeout(() => $("details").scrollIntoView({behavior:"smooth",block:"center"}), 1050);
     }
     envelope.addEventListener("click", openLetter);
