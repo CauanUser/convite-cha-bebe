@@ -115,7 +115,7 @@
     .lightbox.open{display:grid}
     .lightbox img{max-width:min(100%,900px);max-height:82vh;object-fit:contain;border-radius:10px}
     .lightbox button{position:absolute;top:18px;right:18px;border:1px solid #ffffff80;background:#ffffff18;color:white;border-radius:50%;width:42px;height:42px;font-size:1.4rem}
-    @media(max-width:560px){.extra-section{padding:25px 15px;margin-top:22px}.photo-grid{gap:8px}.photo-caption{padding:10px}.photo-caption strong{font-size:.95rem}}
+    @media(max-width:560px){.extra-section{padding:25px 15px;margin-top:22px}.photo-grid{gap:8px}.photo-caption{padding:10px}.photo-caption strong{font-size:.95rem}.video-grid{grid-template-columns:1fr}.video-placeholder{aspect-ratio:16/10;min-height:170px}}
 
     .feature-section{width:min(100%,680px);margin:24px auto 0;padding:28px 22px;background:#fffdf9e8;border:1px solid #ddcbbb;border-radius:18px;box-shadow:var(--shadow);text-align:center}
     .feature-section h3{font:500 clamp(1.6rem,5vw,2.1rem) "Playfair Display",serif;color:#725746;margin:0 0 10px}
@@ -125,7 +125,19 @@
     .gift-item strong{display:block;color:#725746;font:500 1.05rem "Playfair Display",serif;margin-bottom:5px}
     .gift-item small{display:block;color:#796b60;line-height:1.5;margin-bottom:10px}
     .gift-item a{color:#687d68;font-size:.78rem;font-weight:700;text-decoration:none}
-    .video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;text-align:left}
+    .video-card{overflow:hidden;border:1px solid #e5d5c5;border-radius:15px;background:#fffaf4}
+    .video-card video{display:block;width:100%;aspect-ratio:9/16;max-height:360px;background:#30251f;object-fit:contain}
+    .video-placeholder{aspect-ratio:9/10;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:18px;text-align:center;color:#fff8ef;background:radial-gradient(circle at 50% 35%,#b78c72 0,#8d6856 42%,#604a40 100%);position:relative;overflow:hidden}
+    .video-placeholder:before,.video-placeholder:after{content:"";position:absolute;border:1px solid #ffffff35;border-radius:50%;width:190px;height:190px}
+    .video-placeholder:after{width:240px;height:240px}
+    .video-play{z-index:1;width:54px;height:54px;border:1px solid #ffffffaa;border-radius:50%;display:grid;place-items:center;padding-left:4px;background:#ffffff20;font-size:1.05rem}
+    .video-placeholder small{z-index:1;font-size:.58rem;letter-spacing:.16em;line-height:1.6}
+    .video-card-copy{padding:15px}
+    .video-card-copy strong{display:block;font:500 1.05rem "Playfair Display",serif;color:#725746;line-height:1.35}
+    .video-card-copy p{font-size:.76rem;line-height:1.6;color:#796b60;margin:7px 0}
+    .video-card-copy small{font-size:.65rem;color:#9a806e}
+grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     .video-card{min-width:0;text-align:left}
     .video-card video{width:100%;aspect-ratio:16/9;object-fit:cover;background:#eadbcb;border-radius:12px}
     .video-card strong{display:block;color:#725746;font:500 1rem "Playfair Display",serif;margin-top:8px}
@@ -418,19 +430,20 @@
 
     const CONTEUDO_ESPECIAL = {
       tituloFamilia: "Nossa família, nossa maior história",
-      textoFamilia: "Antes mesmo de chegar, esse bebê já transformou nossas vidas. Aqui vamos guardar alguns pedacinhos dessa história.",
+      textoFamilia: "Toda grande história começa com um instante. A nossa ganhou um novo significado quando descobrimos que Samuel Felipe estava a caminho. Enquanto ele não chega, reunimos aqui lembranças de um amor que só cresce.",
       fotosFamilia: [
         { titulo: "A mamãe", descricao: "Um registro cheio de amor", src: "" },
         { titulo: "O papai", descricao: "A espera mais bonita", src: "" },
         { titulo: "Nossa família", descricao: "O começo de tudo", src: "" },
         { titulo: "Um momento especial", descricao: "Memórias para guardar", src: "" }
       ],
-      tituloJornada: "Uma história de amor",
-      textoJornada: "Cada descoberta, cada expectativa e cada pequeno detalhe fazem parte de uma história que está só começando.",
+      tituloJornada: "Os capítulos da nossa espera",
+      textoJornada: "Do primeiro teste positivo ao dia em que descobrimos que você era um menino, cada etapa trouxe uma emoção que queremos guardar para sempre. Esta linha do tempo será preenchida com as datas e lembranças reais da família.",
       momentos: [
-        { icone: "♡", titulo: "A descoberta", texto: "O dia em que descobrimos que uma nova vida estava a caminho." },
-        { icone: "✧", titulo: "A primeira emoção", texto: "Uma alegria difícil de explicar e impossível de esquecer." },
-        { icone: "☼", titulo: "A espera", texto: "Cada dia mais perto de conhecer o amor das nossas vidas." }
+        { icone: "♡", titulo: "A notícia que mudou tudo", texto: "O momento em que o papai descobriu que uma nova vida estava a caminho. A data e o relato real serão adicionados aqui." },
+        { icone: "✧", titulo: "Os primeiros encontros", texto: "Os primeiros ultrassons: quando um amor tão grande começou a ganhar imagem e som." },
+        { icone: "💙", titulo: "É um menino! Samuel Felipe", texto: "O dia da descoberta do sexo do bebê, com o vídeo original da revelação." },
+        { icone: "☼", titulo: "A contagem regressiva", texto: "Preparativos, carinho e expectativa para conhecer pessoalmente o nosso pequeno." }
       ],
       tituloUltrassom: "Os primeiros registros",
       textoUltrassom: "Ainda tão pequenininho, mas já ocupando um espaço imenso no nosso coração.",
@@ -438,8 +451,8 @@
         { titulo: "Primeiro ultrassom", descricao: "O primeiro encontro através da telinha", src: "" },
         { titulo: "Mais um pedacinho de você", descricao: "Cada imagem, uma emoção nova", src: "" }
       ],
-      tituloPais: "Uma mensagem dos papais",
-      mensagemPais: "“Estamos vivendo uma das fases mais especiais das nossas vidas. Será ainda mais bonito dividir essa alegria com você.”",
+      tituloPais: "Uma carta para o nosso Samuel",
+      mensagemPais: "“Meu filho, antes mesmo de conhecer seu rostinho, você já mudou tudo por aqui. Você chegou primeiro nos nossos sonhos, nos nossos planos e no nosso coração. Estamos contando os dias para segurar você nos braços e mostrar o quanto é amado. E a todos que estão fazendo parte dessa espera, obrigado por caminharem com a nossa família.”",
       listaPresentesURL: "",
       presentes: [
         { categoria: "Higiene e cuidado", itens: [
@@ -453,7 +466,8 @@
         ]}
       ],
       videos: [
-        // Exemplo: { titulo: "Nossa descoberta", src: "midia/video.mp4" }
+        { titulo: "Como o papai descobriu que seria pai", descricao: "O instante em que uma notícia mudou a vida do papai para sempre.", src: "", destaque: "A notícia mais emocionante" },
+        { titulo: "O dia em que descobrimos que era menino", descricao: "A revelação de que Samuel Felipe estava chegando para completar nossa família.", src: "", destaque: "Nossa descoberta azul" }
       ],
       musicaURL: "" // Exemplo: "midia/musica.mp3" (use áudio autorizado pelos responsáveis)
 
@@ -559,21 +573,35 @@
     const videos = CONTEUDO_ESPECIAL.videos || [];
     if (videos.length) {
       videos.forEach((video) => {
-        if (!video.src) return;
         const card = document.createElement("article");
         card.className = "video-card";
-        const player = document.createElement("video");
-        player.src = video.src;
-        player.controls = true;
-        player.playsInline = true;
-        player.preload = "metadata";
-        player.setAttribute("aria-label", video.titulo || "Vídeo da família");
+        if (video.src) {
+          const player = document.createElement("video");
+          player.src = video.src;
+          player.controls = true;
+          player.playsInline = true;
+          player.preload = "metadata";
+          player.setAttribute("aria-label", video.titulo || "Vídeo da família");
+          card.appendChild(player);
+        } else {
+          const placeholder = document.createElement("div");
+          placeholder.className = "video-placeholder";
+          placeholder.innerHTML = '<span class="video-play" aria-hidden="true">▶</span><small>VÍDEO ESPECIAL · ESPAÇO RESERVADO</small>';
+          card.appendChild(placeholder);
+        }
+        const copy = document.createElement("div");
+        copy.className = "video-card-copy";
         const title = document.createElement("strong");
         title.textContent = video.titulo || "Um momento especial";
-        card.append(player, title);
+        const desc = document.createElement("p");
+        desc.textContent = video.descricao || "Uma lembrança para guardar.";
+        const note = document.createElement("small");
+        note.textContent = video.src ? "Assista a este momento especial" : "O vídeo original será adicionado aqui";
+        copy.append(title, desc, note);
+        card.appendChild(copy);
         $("videoGallery").appendChild(card);
       });
-      if ($("videoGallery").children.length) $("videosSection").hidden = false;
+      $("videosSection").hidden = false;
     }
 
     if (CONTEUDO_ESPECIAL.musicaURL) {
