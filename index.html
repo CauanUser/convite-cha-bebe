@@ -253,6 +253,8 @@
     };
 
 
+    const $ = (id) => document.getElementById(id);
+
     const CONTEUDO_ESPECIAL = {
       tituloFamilia: "Nossa família, nossa maior história",
       textoFamilia: "Antes mesmo de chegar, esse bebê já transformou nossas vidas. Aqui vamos guardar alguns pedacinhos dessa história.",
@@ -348,7 +350,6 @@
       if (event.target === $("lightbox")) $("lightbox").classList.remove("open");
     });
 
-    const $ = (id) => document.getElementById(id);
     const baby = CONVITE.nomeBebe && CONVITE.nomeBebe !== "Nome do bebê" ? CONVITE.nomeBebe : "Uma nova vida está chegando ♡";
     $("letterTitle").textContent = CONVITE.titulo;
     $("detailTitle").textContent = CONVITE.titulo;
