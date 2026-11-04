@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5eee5">
-  <meta name="description" content="Um convite especial para celebrar a chegada de um bebê.">
-  <title>Um convite especial ♡</title>
+  <meta name="description" content="Um convite especial para celebrar um chá de fraldas.">
+  <title>Chá de fraldas · Um convite especial ♡</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
@@ -169,6 +169,25 @@
     @media(max-width:560px){.page{width:min(100% - 24px,760px);padding-top:30px}.intro{font-size:clamp(2rem,9vw,2.7rem)}.details,.memory-card,.extra-section,.feature-section{border-radius:18px}.details{margin-top:58px}.extra-section,.feature-section{margin-top:18px}.scroll-reveal{transform:translateY(22px);filter:none}.back-to-top{right:12px;bottom:12px;width:42px;height:42px}}
     @media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1;transform:none;filter:none;transition:none}}
 
+
+    /* Identidade de chá de fraldas + navegação rápida */
+    .quick-nav{position:sticky;top:8px;z-index:25;display:flex;justify-content:center;gap:6px;width:min(100%,600px);margin:18px auto 4px;padding:7px;border:1px solid #dfcdbb;border-radius:999px;background:#fffdf9ed;box-shadow:0 8px 28px #59432c16;backdrop-filter:blur(12px)}
+    .quick-nav[hidden]{display:none}
+    .quick-nav a{flex:1;text-align:center;text-decoration:none;color:#806b5a;font-size:.72rem;font-weight:700;padding:11px 8px;border-radius:999px;white-space:nowrap;transition:background .2s,color .2s,transform .2s}
+    .quick-nav a:hover,.quick-nav a.active{background:#eaddcf;color:#654b3b}
+    .quick-nav a:focus-visible{outline:2px solid #9c8069;outline-offset:2px}
+    .diaper-note{display:flex;align-items:center;justify-content:center;gap:10px;max-width:430px;margin:20px auto 14px;padding:12px 15px;border:1px solid #e3d3c3;border-radius:14px;background:linear-gradient(120deg,#fbf5ed,#f2e7dc);color:#796657;font-size:.76rem;line-height:1.5}
+    .diaper-symbol{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#e6d4c2;color:#8c6952;font:1.2rem "Playfair Display",serif}
+    #giftsSection h4{margin-top:12px!important}
+    .size-picker{gap:10px;margin:16px 0 22px}
+    .size-picker span{min-width:58px;height:52px;border-radius:13px;font-size:.88rem;font-weight:700}
+    .size-picker input:focus-visible+span{outline:3px solid #b58e73;outline-offset:3px}
+    .gift-category h4{padding-bottom:9px;border-bottom:1px solid #eaded1}
+    #selectedGifts{margin-top:18px;border:1px dashed #d7c2ad;background:#fbf6ef}
+    #rsvpSection{scroll-margin-top:85px}
+    #details,#memories,#giftsSection{scroll-margin-top:84px}
+    @media(max-width:560px){.quick-nav{top:5px;gap:3px;padding:5px;border-radius:16px}.quick-nav a{font-size:.66rem;padding:10px 3px}.diaper-note{font-size:.72rem}.size-picker span{min-width:54px}}
+
   </style>
 </head>
 <body>
@@ -177,15 +196,15 @@
   <main class="page">
     <span class="sparkle s1">✧</span><span class="sparkle s2">✦</span><span class="sparkle s3">✧</span>
     <p class="eyebrow">Um momento cheio de amor</p>
-    <h1 class="intro">Você está convidado(a)<br>para uma celebração especial</h1>
-    <p class="subintro">Há uma cartinha esperando por você. ♡</p>\n    
+    <h1 class="intro">Você está convidado(a)<br>para o nosso chá de fraldas</h1>
+    <p class="subintro">Uma celebração cheia de carinho está esperando por você. ♡</p>\n    
 
     <section class="scene" aria-label="Convite em envelope">
       <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir convite">
         <div class="env-back"></div>
         <article class="letter">
           <p class="letter-kicker">Com carinho, convidamos você</p>
-          <h2 id="letterTitle">Chá de bebê</h2>
+          <h2 id="letterTitle">Chá de fraldas</h2>
           <p class="baby-name" id="letterBaby">Uma nova vida está chegando ♡</p>
           <p class="letter-copy" id="letterMessage">Uma nova vida está chegando para encher nossos dias de amor. Queremos compartilhar esse momento tão especial com pessoas queridas. Será uma alegria ter você conosco!</p>
         </article>
@@ -198,7 +217,7 @@
 
     <section class="details" id="details" aria-live="polite">
       <p class="small-title">Reserve esse momento</p>
-      <h3 id="detailTitle">Chá de bebê</h3>
+      <h3 id="detailTitle">Chá de fraldas</h3>
       <p class="message" id="detailMessage">Será uma alegria celebrar com você a chegada desse amor.</p>
       <div class="event-strip"><span id="eventStripDate">DATA A DEFINIR</span><strong id="eventStripTime">HORÁRIO A DEFINIR</strong></div>
       <div class="info-grid">
@@ -221,6 +240,13 @@
       </div>
       <p class="closing" id="closing">Esperamos você para celebrar conosco! ♡</p>
     </section>
+
+    <nav class="quick-nav" id="quickNav" aria-label="Atalhos do convite" hidden>
+      <a href="#details" data-section="details">Evento</a>
+      <a href="#memories" data-section="memories">História</a>
+      <a href="#giftsSection" data-section="giftsSection">Fraldas</a>
+      <a href="#rsvpSection" data-section="rsvpSection">Confirmar</a>
+    </nav>
 
     <section class="memories" id="memories" aria-label="Memórias da família">
       <article class="memory-card" id="galleryCard" hidden>
@@ -284,9 +310,10 @@
 
     <section class="feature-section" id="giftsSection" hidden>
       <p class="extra-kicker">Um carinho para o bebê</p>
-      <h3>Escolha uma fralda e um mimo</h3>
-      <p>Se desejar presentear, escolha o tamanho da fralda e/ou um item da lista. Sua presença é o nosso maior presente!</p>
-      <h4 style="font:500 1.1rem 'Playfair Display',serif;color:#725746;margin:18px 0 8px">01 · Tamanho da fralda</h4>
+      <h3>Um carinho em forma de fralda</h3>
+      <p>Escolha o tamanho de fralda que deseja levar e, se quiser, acrescente um mimo da lista. O mais importante é celebrar esse momento com você!</p>
+      <div class="diaper-note"><span class="diaper-symbol" aria-hidden="true">♡</span><span>Escolha o tamanho que ficar melhor para a família</span></div>
+       <h4 style="font:500 1.1rem 'Playfair Display',serif;color:#725746;margin:18px 0 8px">01 · Escolha o tamanho da fralda</h4>
       <div class="size-picker" id="diaperSizes">
         <label><input type="radio" name="diaperSize" value="RN"><span>RN</span></label>
         <label><input type="radio" name="diaperSize" value="P"><span>P</span></label>
@@ -305,7 +332,7 @@
         <label class="field-label">Seu nome
           <input type="text" id="guestName" placeholder="Como podemos chamar você?" maxlength="80" required>
         </label>
-        <div class="field-label">Você vai ao chá?
+        <div class="field-label">Você vai ao chá de fraldas?
           <div class="attendance">
             <label><input type="radio" name="attendance" value="Sim, estarei lá" required> Sim, estarei lá</label>
             <label><input type="radio" name="attendance" value="Não poderei ir"> Não poderei ir</label>
@@ -334,21 +361,21 @@
       <img id="lightboxImage" alt="Foto ampliada da família">
     </div>
 
-    <footer>FEITO COM CARINHO · UM CONVITE ESPECIAL</footer>
+    <footer>FEITO COM CARINHO · CHÁ DE FRALDAS</footer>
   </main>
 
   <script>
     // PERSONALIZE SOMENTE ESTE BLOCO COM OS DADOS DO EVENTO.
     const CONVITE = {
       nomeBebe: "Nome do bebê",
-      titulo: "Chá de bebê",
+      titulo: "Chá de fraldas",
       mensagem: "Uma nova vida está chegando para encher nossos dias de amor. Queremos compartilhar esse momento tão especial com pessoas queridas. Será uma alegria ter você conosco!",
       dataTexto: "A definir",
       dataISO: "", // Formato: AAAA-MM-DDTHH:MM:SS (horário local)
       horario: "A definir",
       local: "A definir",
       whatsapp: "5585921957691",
-      mensagemWhatsApp: "Olá! Gostaria de confirmar minha presença no chá de bebê.",
+      mensagemWhatsApp: "Olá! Gostaria de confirmar minha presença no chá de fraldas.",
       mapaURL: "",
       encerramento: "Esperamos você para celebrar conosco! ♡"
     };
@@ -617,7 +644,7 @@
       presentLines.push(...gifts);
       const message = [
         "Olá! Aqui é " + guest + ".",
-        "Confirmação do chá de bebê:",
+        "Confirmação do chá de fraldas:",
         attendance + ".",
         presentLines.length ? "Presente(s) escolhido(s): " + presentLines.join(", ") + "." : "Ainda não escolhi um presente.",
         "Até lá! ♡"
@@ -706,6 +733,7 @@
       window.setTimeout(() => $("details").classList.add("visible"), 650);
       window.setTimeout(() => $("memories").classList.add("visible"), 900);
       window.setTimeout(startScrollExperience, 700);
+      window.setTimeout(() => { $("quickNav").hidden = false; }, 720);
       window.setTimeout(() => $("details").scrollIntoView({behavior:"smooth",block:"center"}), 1050);
     }
     const progressBar=$("readingProgress"), backToTop=$("backToTop");
@@ -717,6 +745,25 @@
     window.addEventListener("scroll",updateReadingProgress,{passive:true});
     window.addEventListener("resize",updateReadingProgress);
     updateReadingProgress();
+
+    const quickNavLinks=[...document.querySelectorAll(".quick-nav a")];
+    if ("IntersectionObserver" in window && quickNavLinks.length) {
+      const navObserver=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(!entry.isIntersecting)return;
+          quickNavLinks.forEach(link=>{
+            const active=link.dataset.section===entry.target.id;
+            link.classList.toggle("active",active);
+            if(active)link.setAttribute("aria-current","location");
+            else link.removeAttribute("aria-current");
+          });
+        });
+      },{rootMargin:"-22% 0px -62% 0px",threshold:0});
+      ["details","memories","giftsSection","rsvpSection"].forEach(id=>{
+        const section=$(id);
+        if(section&&!section.hidden)navObserver.observe(section);
+      });
+    }
     backToTop.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
     envelope.addEventListener("click", openLetter);
     envelope.addEventListener("keydown", (event) => {
