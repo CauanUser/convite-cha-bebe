@@ -56,10 +56,22 @@ alter table public.gift_items enable row level security;
 alter table public.gift_reservations enable row level security;
 alter table public.gift_reservation_items enable row level security;
 
-drop policy if exists "Admins can read admin list" on public.admin_users;
-create policy "Admins can read admin list" on public.admin_users
+create or replace function public.is_gift_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $
+  select exists (select 1 from public.admin_users where user_id = auth.uid());
+$;
+revoke all on function public.is_gift_admin() from public;
+grant execute on function public.is_gift_admin() to authenticated;
+
+drop policy if exists "Admins can read own admin record" on public.admin_users;
+create policy "Admins can read own admin record" on public.admin_users
   for select to authenticated
-  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
+  using (user_id = auth.uid());
 
 drop policy if exists "Public can view active gifts" on public.gift_items;
 create policy "Public can view active gifts" on public.gift_items
@@ -69,24 +81,24 @@ create policy "Public can view active gifts" on public.gift_items
 drop policy if exists "Admins manage gifts" on public.gift_items;
 create policy "Admins manage gifts" on public.gift_items
   for all to authenticated
-  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()))
-  with check (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
+  using (public.is_gift_admin())
+  with check (public.is_gift_admin());
 
 drop policy if exists "Admins view reservations" on public.gift_reservations;
 create policy "Admins view reservations" on public.gift_reservations
   for select to authenticated
-  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
+  using (public.is_gift_admin());
 
 drop policy if exists "Admins update reservations" on public.gift_reservations;
 create policy "Admins update reservations" on public.gift_reservations
   for update to authenticated
-  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()))
-  with check (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
+  using (public.is_gift_admin())
+  with check (public.is_gift_admin());
 
 drop policy if exists "Admins view reservation items" on public.gift_reservation_items;
 create policy "Admins view reservation items" on public.gift_reservation_items
   for select to authenticated
-  using (exists (select 1 from public.admin_users a where a.user_id = auth.uid()));
+  using (public.is_gift_admin());
 
 -- Guests must reserve through this function. It locks stock rows to prevent
 -- two guests from reserving the same final units at the same time.
@@ -186,20 +198,24 @@ set search_path = public
 as $$
 declare
   v_line record;
+  v_old_status text;
 begin
-  if not exists (select 1 from public.admin_users where user_id = auth.uid()) then
+  if not public.is_gift_admin() then
     raise exception 'Acesso não autorizado.';
   end if;
   if p_status not in ('received','cancelled','reserved') then
     raise exception 'Status inválido.';
   end if;
 
-  perform 1 from public.gift_reservations
+  select status into v_old_status from public.gift_reservations
     where id = p_reservation_id for update;
 
   if not found then raise exception 'Reserva não encontrada.'; end if;
+  if v_old_status = 'cancelled' and p_status <> 'cancelled' then
+    raise exception 'Uma reserva cancelada não pode ser reativada; crie uma nova reserva.';
+  end if;
 
-  if p_status = 'cancelled' then
+  if p_status = 'cancelled' and v_old_status <> 'cancelled' then
     for v_line in
       select gift_item_id, quantity
       from public.gift_reservation_items
