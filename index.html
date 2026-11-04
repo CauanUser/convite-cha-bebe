@@ -68,7 +68,27 @@
     .sparkle{position:absolute;color:#b28d70;opacity:.5;font-size:18px;animation:float 5s ease-in-out infinite;pointer-events:none}
     .s1{top:10%;left:3%}.s2{top:35%;right:1%;animation-delay:1.5s}.s3{bottom:13%;left:7%;animation-delay:2.5s}
     @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-10px) rotate(12deg)}}
-    @media(max-width:560px){.page{padding-top:34px}.envelope{height:285px}.env-back:before{border-width:0 0 285px 50vw}.env-back:after{border-width:0 50vw 285px 0}.letter{padding:20px 17px}.letter-copy{font-size:.75rem}.envelope.open .letter{transform:translateY(-118px)}.details{padding:25px 16px;margin-top:68px}.info-grid{gap:8px}.info{padding:13px 7px}.btn{width:100%}.actions{padding:0 8px}}
+
+    .memories{width:min(100%,680px);margin:34px auto 0;display:grid;gap:22px;opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .7s,transform .7s}
+    .memories.visible{opacity:1;transform:translateY(0);pointer-events:auto}
+    .memory-card{background:#fffdf9e8;border:1px solid #ddcbbb;border-radius:18px;padding:28px 22px;box-shadow:var(--shadow);text-align:center}
+    .section-kicker{font-size:.63rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+    .memory-card h3{font-family:"Playfair Display",serif;font-size:clamp(1.65rem,5vw,2.2rem);font-weight:500;color:#725746;margin:0 0 12px}
+    .memory-copy{max-width:520px;margin:0 auto;color:#796b60;font-size:.9rem;line-height:1.8;white-space:pre-line}
+    .gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+    .photo{margin:0;min-width:0}
+    .photo img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:13px;background:#f1e7dc;border:1px solid #e2d2c2}
+    .photo figcaption{font-size:.72rem;color:var(--muted);margin-top:8px}
+    .timeline{display:grid;gap:15px;max-width:520px;margin:22px auto 0;text-align:left}
+    .moment{display:grid;grid-template-columns:12px 1fr;gap:12px;align-items:start}
+    .moment-dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px #a8796520}
+    .moment strong{display:block;font-family:"Playfair Display",serif;font-size:1.12rem;font-weight:500;color:#725746;margin-bottom:3px}
+    .moment p{margin:0;color:#796b60;font-size:.84rem;line-height:1.65}
+    .gift-link{display:none;margin-top:18px}
+    .gift-link.show{display:inline-flex}
+    .memory-sign{font-family:"Playfair Display",serif;font-style:italic;color:var(--accent);margin:20px 0 0;font-size:1.15rem}
+    @media(max-width:560px){.memory-card{padding:24px 16px}.gallery{gap:7px}.photo figcaption{font-size:.64rem}}
+\n    @media(max-width:560px){.page{padding-top:34px}.envelope{height:285px}.env-back:before{border-width:0 0 285px 50vw}.env-back:after{border-width:0 50vw 285px 0}.letter{padding:20px 17px}.letter-copy{font-size:.75rem}.envelope.open .letter{transform:translateY(-118px)}.details{padding:25px 16px;margin-top:68px}.info-grid{gap:8px}.info{padding:13px 7px}.btn{width:100%}.actions{padding:0 8px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -119,7 +139,40 @@
       </div>
       <p class="closing" id="closing">Esperamos você para celebrar conosco! ♡</p>
     </section>
-    <footer>FEITO COM CARINHO · UM CONVITE ESPECIAL</footer>
+
+    <section class="memories" id="memories" aria-label="Memórias da família">
+      <article class="memory-card" id="galleryCard" hidden>
+        <p class="section-kicker">Um pouquinho da nossa história</p>
+        <h3>Amor em cada detalhe</h3>
+        <p class="memory-copy" id="galleryIntro"></p>
+        <div class="gallery">
+          <figure class="photo" id="familyPhoto"><img id="familyImg" alt="Foto da família"><figcaption>Nosso cantinho de amor</figcaption></figure>
+          <figure class="photo" id="motherPhoto"><img id="motherImg" alt="Foto da mamãe"><figcaption>O amor que já cresce aqui</figcaption></figure>
+          <figure class="photo" id="ultrasoundPhoto"><img id="ultrasoundImg" alt="Imagem do ultrassom do bebê"><figcaption>Nosso pequeno grande milagre</figcaption></figure>
+        </div>
+      </article>
+      <article class="memory-card" id="storyCard" hidden>
+        <p class="section-kicker">Cada capítulo, uma emoção</p>
+        <h3 id="storyTitle">A nossa espera mais bonita</h3>
+        <p class="memory-copy" id="storyIntro"></p>
+        <div class="timeline" id="timeline"></div>
+      </article>
+      <article class="memory-card" id="parentsCard" hidden>
+        <p class="section-kicker">Uma mensagem especial</p>
+        <h3>Com amor, dos papais</h3>
+        <p class="memory-copy" id="parentsMessage"></p>
+        <p class="memory-sign" id="parentsSignature"></p>
+      </article>
+      <article class="memory-card" id="babyCard" hidden>
+        <p class="section-kicker">Para quem já é tão amado</p>
+        <h3>Uma cartinha para você, bebê</h3>
+        <p class="memory-copy" id="babyMessage"></p>
+      </article>
+      <div style="text-align:center">
+        <a class="btn btn-secondary gift-link" id="giftLink" href="#" target="_blank" rel="noopener">♡ Sugestão de presente</a>
+      </div>
+    </section>
+\n    <footer>FEITO COM CARINHO · UM CONVITE ESPECIAL</footer>
   </main>
 
   <script>
@@ -158,11 +211,66 @@
     if (CONVITE.mapaURL) $("mapLink").href = CONVITE.mapaURL;
     else $("mapLink").hidden = true;
 
-    const envelope = $("envelope");
+
+    // Seções especiais: só aparecem quando houver conteúdo personalizado.
+    const photos = CONVITE.fotos || {};
+    const photoConfig = [
+      ["familia", "familyPhoto", "familyImg"],
+      ["mamae", "motherPhoto", "motherImg"],
+      ["ultrassom", "ultrasoundPhoto", "ultrasoundImg"]
+    ];
+    let hasPhoto = false;
+    photoConfig.forEach(([key, cardId, imgId]) => {
+      const src = photos[key];
+      if (!src) { $(cardId).hidden = true; return; }
+      const img = $(imgId);
+      img.src = src;
+      img.addEventListener("error", () => { $(cardId).hidden = true; });
+      $(cardId).hidden = false;
+      hasPhoto = true;
+    });
+    if (hasPhoto) {
+      $("galleryIntro").textContent = CONVITE.textoGaleria || "";
+      $("galleryCard").hidden = false;
+    }
+    if (CONVITE.momentos && CONVITE.momentos.length) {
+      $("storyTitle").textContent = CONVITE.tituloHistoria || "A nossa história";
+      $("storyIntro").textContent = CONVITE.introducaoHistoria || "";
+      $("timeline").innerHTML = "";
+      CONVITE.momentos.forEach((item) => {
+        const node = document.createElement("div");
+        node.className = "moment";
+        const dot = document.createElement("span");
+        dot.className = "moment-dot";
+        const body = document.createElement("div");
+        const title = document.createElement("strong");
+        title.textContent = item.titulo || "";
+        const paragraph = document.createElement("p");
+        paragraph.textContent = item.texto || "";
+        body.append(title, paragraph);
+        node.append(dot, body);
+        $("timeline").append(node);
+      });
+      $("storyCard").hidden = false;
+    }
+    if (CONVITE.mensagemDosPais) {
+      $("parentsMessage").textContent = CONVITE.mensagemDosPais;
+      $("parentsSignature").textContent = CONVITE.assinaturaDosPais || "";
+      $("parentsCard").hidden = false;
+    }
+    if (CONVITE.cartaParaBebe) {
+      $("babyMessage").textContent = CONVITE.cartaParaBebe;
+      $("babyCard").hidden = false;
+    }
+    if (CONVITE.listaPresentesURL) {
+      $("giftLink").href = CONVITE.listaPresentesURL;
+      $("giftLink").classList.add("show");
+    }
+\n    const envelope = $("envelope");
     function openLetter() {
       if (envelope.classList.contains("open")) return;
       envelope.classList.add("open");
-      window.setTimeout(() => $("details").classList.add("visible"), 650);
+      window.setTimeout(() => $("details").classList.add("visible"), 650);\n      window.setTimeout(() => $("memories").classList.add("visible"), 900);
       window.setTimeout(() => $("details").scrollIntoView({behavior:"smooth",block:"center"}), 1050);
     }
     envelope.addEventListener("click", openLetter);
