@@ -538,6 +538,78 @@
     $("eventPlace").textContent = CONVITE.local;
     $("closing").textContent = CONVITE.encerramento;
 
+    // Catálogo de presentes e seleção de tamanho de fralda.
+    $("eventStripDate").textContent = CONVITE.dataTexto || "DATA A DEFINIR";
+    $("eventStripTime").textContent = CONVITE.horario || "HORÁRIO A DEFINIR";
+    const selectedGiftNames = new Set();
+    const catalog = $("giftCatalog");
+    (CONTEUDO_ESPECIAL.presentes || []).forEach((group, index) => {
+      const section = document.createElement("section");
+      section.className = "gift-category";
+      const heading = document.createElement("h4");
+      heading.textContent = String(index + 2).padStart(2,"0") + " · " + group.categoria;
+      const grid = document.createElement("div");
+      grid.className = "gift-choice-grid";
+      (group.itens || []).forEach((gift) => {
+        const label = document.createElement("label");
+        label.className = "gift-choice";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = gift;
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) selectedGiftNames.add(gift);
+          else selectedGiftNames.delete(gift);
+          updateGiftSummary();
+        });
+        const textWrap = document.createElement("span");
+        const title = document.createElement("strong");
+        title.textContent = gift;
+        const note = document.createElement("small");
+        note.textContent = "Toque para selecionar";
+        textWrap.append(title, note);
+        label.append(checkbox, textWrap);
+        grid.appendChild(label);
+      });
+      section.append(heading, grid);
+      catalog.appendChild(section);
+    });
+    function updateGiftSummary() {
+      const size = document.querySelector('input[name="diaperSize"]:checked')?.value;
+      const selected = [...selectedGiftNames];
+      const parts = [];
+      if (size) parts.push("Fralda tamanho " + size);
+      parts.push(...selected);
+      $("selectedGifts").textContent = parts.length
+        ? "Sua seleção: " + parts.join(" • ")
+        : "Nenhum presente selecionado até agora.";
+    }
+    document.querySelectorAll('input[name="diaperSize"]').forEach((input) => input.addEventListener("change", updateGiftSummary));
+    if ((CONTEUDO_ESPECIAL.presentes || []).length) $("giftsSection").hidden = false;
+
+    $("rsvpForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const phoneNumber = (CONVITE.whatsapp || "").replace(/\D/g, "");
+      if (!phoneNumber) {
+        alert("O WhatsApp dos papais ainda não foi configurado.");
+        return;
+      }
+      const guest = $("guestName").value.trim();
+      const attendance = document.querySelector('input[name="attendance"]:checked')?.value;
+      const size = document.querySelector('input[name="diaperSize"]:checked')?.value;
+      const gifts = [...selectedGiftNames];
+      const presentLines = [];
+      if (size) presentLines.push("Fralda tamanho " + size);
+      presentLines.push(...gifts);
+      const message = [
+        "Olá! Aqui é " + guest + ".",
+        "Confirmação do chá de bebê:",
+        attendance + ".",
+        presentLines.length ? "Presente(s) escolhido(s): " + presentLines.join(", ") + "." : "Ainda não escolhi um presente.",
+        "Até lá! ♡"
+      ].join("\n");
+      window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message), "_blank", "noopener");
+    });
+
     const phone = (CONVITE.whatsapp || "").replace(/\D/g, "");
     $("rsvp").href = phone
       ? "https://wa.me/" + phone + "?text=" + encodeURIComponent(CONVITE.mensagemWhatsApp)
