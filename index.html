@@ -130,8 +130,6 @@
     .video-card video{width:100%;aspect-ratio:16/9;object-fit:cover;background:#eadbcb;border-radius:12px}
     .video-card strong{display:block;color:#725746;font:500 1rem "Playfair Display",serif;margin-top:8px}
     .music-control{position:fixed;right:16px;bottom:16px;z-index:15;border:1px solid #d5c2af;background:#fffdf9;color:#725746;border-radius:999px;padding:12px 16px;box-shadow:0 8px 24px #59432c25;font:600 .78rem "DM Sans",sans-serif;cursor:pointer}
-    .hero-bear{font-size:clamp(4rem,15vw,6.5rem);line-height:1;margin:18px auto 24px;text-align:center;filter:drop-shadow(0 12px 10px #8d674333);animation:bearFloat 4s ease-in-out infinite}
-    @keyframes bearFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
     .event-strip{width:min(100%,560px);display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px auto 0;padding:13px 16px;border-top:1px solid #d8c6b5;border-bottom:1px solid #d8c6b5;color:#806b5a;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
     .event-strip strong{font-size:.78rem;letter-spacing:.03em;color:#725746}
     .gift-category{margin-top:22px;text-align:left}
@@ -155,16 +153,32 @@
     .attendance input{accent-color:#687d68}
     .selected-gifts{padding:12px;background:#f7f0e8;border-radius:10px;font-size:.75rem;line-height:1.6;color:#796b60}
     .rsvp-submit{width:100%;border:0;cursor:pointer}
-    @media(max-width:560px){.feature-section{padding:24px 15px}.gift-items,.video-grid,.gift-choice-grid{grid-template-columns:1fr}.music-control{right:10px;bottom:10px}.event-strip{font-size:.61rem}.hero-bear{margin:12px auto 18px}} 
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+    .reading-progress{position:fixed;z-index:50;top:0;left:0;width:100%;height:4px;background:#e7d9cb}.reading-progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#9a735d,#c9a58b);transition:width .12s linear}
+    .page{justify-content:flex-start;padding-top:clamp(34px,7vh,72px)}.intro{max-width:680px;letter-spacing:-.025em}.subintro{margin-bottom:28px}.scene{margin-bottom:12px}
+    .details,.memory-card,.extra-section,.feature-section{border-radius:22px;box-shadow:0 18px 55px #59432c12}.details{scroll-margin-top:28px}
+    .extra-section,.feature-section{position:relative;overflow:hidden}.extra-section:before,.feature-section:before,.memory-card:before{content:"";position:absolute;top:0;left:24px;right:24px;height:1px;background:linear-gradient(90deg,transparent,#cdb9a7,transparent)}
+    .info{transition:transform .25s,background .25s}.info:hover{transform:translateY(-3px);background:#f2e7dc}.btn{min-height:50px;transition:transform .22s,box-shadow .22s,background .22s}
+    .btn:focus-visible,.gift-choice:focus-within,.size-picker label:focus-within,.rsvp-form input:focus-visible{outline:3px solid #b58e73;outline-offset:3px}.btn-primary:hover{box-shadow:0 10px 24px #50684b35}
+    .gift-choice{transition:border-color .2s,background .2s,transform .2s}.gift-choice:hover{transform:translateY(-2px);border-color:#d2bca8}.size-picker span{transition:background .2s,color .2s,transform .2s}.size-picker label:hover span{transform:translateY(-2px)}
+    .attendance label:has(input:checked){border-color:#8a9a82;background:#edf1e9}
+    .scroll-reveal{opacity:0;transform:translateY(34px);filter:blur(3px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1),filter .8s}.scroll-reveal.is-visible{opacity:1;transform:translateY(0);filter:blur(0)}
+    .scroll-reveal[data-delay="1"]{transition-delay:.08s}.scroll-reveal[data-delay="2"]{transition-delay:.16s}.scroll-reveal[data-delay="3"]{transition-delay:.24s}.scroll-reveal[data-delay="4"]{transition-delay:.32s}
+    .back-to-top{position:fixed;right:16px;bottom:18px;z-index:18;width:46px;height:46px;border:1px solid #d8c6b5;border-radius:50%;background:#fffdf9ed;color:#725746;box-shadow:0 8px 24px #59432c20;font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .25s,transform .25s}.back-to-top.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+    @media(max-width:560px){.page{width:min(100% - 24px,760px);padding-top:30px}.intro{font-size:clamp(2rem,9vw,2.7rem)}.details,.memory-card,.extra-section,.feature-section{border-radius:18px}.details{margin-top:58px}.extra-section,.feature-section{margin-top:18px}.scroll-reveal{transform:translateY(22px);filter:none}.back-to-top{right:12px;bottom:12px;width:42px;height:42px}}
+    @media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1;transform:none;filter:none;transition:none}}
+
   </style>
 </head>
 <body>
+  <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Voltar ao início">↑</button>
   <main class="page">
     <span class="sparkle s1">✧</span><span class="sparkle s2">✦</span><span class="sparkle s3">✧</span>
     <p class="eyebrow">Um momento cheio de amor</p>
     <h1 class="intro">Você está convidado(a)<br>para uma celebração especial</h1>
-    <p class="subintro">Há uma cartinha esperando por você. ♡</p>\n    <div class="hero-bear" aria-label="Ursinho de pelúcia">🧸</div>
+    <p class="subintro">Há uma cartinha esperando por você. ♡</p>\n    
 
     <section class="scene" aria-label="Convite em envelope">
       <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir convite">
@@ -186,7 +200,8 @@
       <p class="small-title">Reserve esse momento</p>
       <h3 id="detailTitle">Chá de bebê</h3>
       <p class="message" id="detailMessage">Será uma alegria celebrar com você a chegada desse amor.</p>
-      <div class="event-strip"><span id="eventStripDate">DATA A DEFINIR</span><strong id="eventStripTime">HORÁRIO A DEFINIR</strong></div>\n      <div class="info-grid">
+      <div class="event-strip"><span id="eventStripDate">DATA A DEFINIR</span><strong id="eventStripTime">HORÁRIO A DEFINIR</strong></div>
+      <div class="info-grid">
         <div class="info"><div class="symbol">♡</div><span>Data</span><strong id="eventDate">A definir</strong></div>
         <div class="info"><div class="symbol">◷</div><span>Horário</span><strong id="eventTime">A definir</strong></div>
         <div class="info" style="grid-column:1/-1"><div class="symbol">⌖</div><span>Local</span><strong id="eventPlace">A definir</strong></div>
@@ -299,7 +314,7 @@
         <button class="btn btn-primary rsvp-submit" type="submit">♡ Confirmar pelo WhatsApp</button>
       </form>
     </section>
-    <section class="feature-section" id="videosSection" hidden>
+    <section class="feature-section" id="giftSuggestionsSection" hidden>
       <p class="extra-kicker">Um carinho para o bebê</p>
       <h3>Lista de sugestões de presentes</h3>
       <p>Preparamos algumas sugestões para quem desejar presentear. Sua presença continua sendo o mais importante!</p>
@@ -672,13 +687,37 @@
     }
 
     const envelope = $("envelope");
+    let revealStarted = false;
+    function startScrollExperience() {
+      if (revealStarted) return;
+      revealStarted = true;
+      const targets = [...document.querySelectorAll("#memories .memory-card, .extra-section, .feature-section, footer")].filter(node => !node.hidden);
+      targets.forEach((node,index) => { node.classList.add("scroll-reveal"); node.dataset.delay = String(index % 5); });
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+        }), {threshold:0.12,rootMargin:"0px 0px -45px 0px"});
+        targets.forEach(node => observer.observe(node));
+      } else targets.forEach(node => node.classList.add("is-visible"));
+    }
     function openLetter() {
       if (envelope.classList.contains("open")) return;
       envelope.classList.add("open");
       window.setTimeout(() => $("details").classList.add("visible"), 650);
       window.setTimeout(() => $("memories").classList.add("visible"), 900);
+      window.setTimeout(startScrollExperience, 700);
       window.setTimeout(() => $("details").scrollIntoView({behavior:"smooth",block:"center"}), 1050);
     }
+    const progressBar=$("readingProgress"), backToTop=$("backToTop");
+    function updateReadingProgress() {
+      const maxScroll=document.documentElement.scrollHeight-window.innerHeight;
+      progressBar.style.width=(maxScroll>0?Math.min(100,window.scrollY/maxScroll*100):0)+"%";
+      backToTop.classList.toggle("show",window.scrollY>520);
+    }
+    window.addEventListener("scroll",updateReadingProgress,{passive:true});
+    window.addEventListener("resize",updateReadingProgress);
+    updateReadingProgress();
+    backToTop.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
     envelope.addEventListener("click", openLetter);
     envelope.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
