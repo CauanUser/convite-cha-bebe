@@ -117,6 +117,20 @@
     .lightbox button{position:absolute;top:18px;right:18px;border:1px solid #ffffff80;background:#ffffff18;color:white;border-radius:50%;width:42px;height:42px;font-size:1.4rem}
     @media(max-width:560px){.extra-section{padding:25px 15px;margin-top:22px}.photo-grid{gap:8px}.photo-caption{padding:10px}.photo-caption strong{font-size:.95rem}}
 
+    .feature-section{width:min(100%,680px);margin:24px auto 0;padding:28px 22px;background:#fffdf9e8;border:1px solid #ddcbbb;border-radius:18px;box-shadow:var(--shadow);text-align:center}
+    .feature-section h3{font:500 clamp(1.6rem,5vw,2.1rem) "Playfair Display",serif;color:#725746;margin:0 0 10px}
+    .feature-section p{color:#796b60;font-size:.86rem;line-height:1.7;margin:0 auto 18px;max-width:520px}
+    .gift-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;text-align:left}
+    .gift-item{padding:15px;background:#f7f0e8;border-radius:12px}
+    .gift-item strong{display:block;color:#725746;font:500 1.05rem "Playfair Display",serif;margin-bottom:5px}
+    .gift-item small{display:block;color:#796b60;line-height:1.5;margin-bottom:10px}
+    .gift-item a{color:#687d68;font-size:.78rem;font-weight:700;text-decoration:none}
+    .video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .video-card{min-width:0;text-align:left}
+    .video-card video{width:100%;aspect-ratio:16/9;object-fit:cover;background:#eadbcb;border-radius:12px}
+    .video-card strong{display:block;color:#725746;font:500 1rem "Playfair Display",serif;margin-top:8px}
+    .music-control{position:fixed;right:16px;bottom:16px;z-index:15;border:1px solid #d5c2af;background:#fffdf9;color:#725746;border-radius:999px;padding:12px 16px;box-shadow:0 8px 24px #59432c25;font:600 .78rem "DM Sans",sans-serif;cursor:pointer}
+    @media(max-width:560px){.feature-section{padding:24px 15px}.gift-items,.video-grid{grid-template-columns:1fr}.music-control{right:10px;bottom:10px}} 
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -228,6 +242,21 @@
       <p class="parents-note" id="parentsMessage">“Estamos vivendo uma das fases mais especiais das nossas vidas. Será ainda mais bonito dividir essa alegria com você.”</p>
     </section>
 
+    <section class="feature-section" id="giftsSection" hidden>
+      <p class="extra-kicker">Um carinho para o bebê</p>
+      <h3>Lista de sugestões de presentes</h3>
+      <p>Preparamos algumas sugestões para quem desejar presentear. Sua presença continua sendo o mais importante!</p>
+      <div class="gift-items" id="giftItems"></div>
+    </section>
+    <section class="feature-section" id="videosSection" hidden>
+      <p class="extra-kicker">Momentos em movimento</p>
+      <h3>Um pedacinho da nossa espera</h3>
+      <p>Vídeos especiais para guardar e compartilhar essa fase tão bonita.</p>
+      <div class="video-grid" id="videoGallery"></div>
+    </section>
+    <audio id="backgroundMusic" loop preload="none"></audio>
+    <button class="music-control" id="musicToggle" type="button" hidden aria-pressed="false">♫ Tocar música</button>
+
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada">
       <button type="button" id="closeLightbox" aria-label="Fechar foto">×</button>
       <img id="lightboxImage" alt="Foto ampliada da família">
@@ -279,7 +308,15 @@
       ],
       tituloPais: "Uma mensagem dos papais",
       mensagemPais: "“Estamos vivendo uma das fases mais especiais das nossas vidas. Será ainda mais bonito dividir essa alegria com você.”",
-      listaPresentesURL: ""
+      listaPresentesURL: "",
+      presentes: [
+        // Exemplo: { nome: "Fraldas tamanho M", descricao: "Pacote de sua preferência", url: "https://..." }
+      ],
+      videos: [
+        // Exemplo: { titulo: "Nossa descoberta", src: "midia/video.mp4" }
+      ],
+      musicaURL: "" // Exemplo: "midia/musica.mp3" (use áudio autorizado pelos responsáveis)
+
     };
 
     function renderPhotoGallery(containerId, photos) {
@@ -345,6 +382,81 @@
       item.append(icon, content);
       $("journeyTimeline").appendChild(item);
     });
+    // Recursos opcionais: presentes, vídeos e música só aparecem quando configurados.
+    const gifts = CONTEUDO_ESPECIAL.presentes || [];
+    if (gifts.length || CONTEUDO_ESPECIAL.listaPresentesURL) {
+      const wrap = $("giftItems");
+      gifts.forEach((gift) => {
+        const item = document.createElement("article");
+        item.className = "gift-item";
+        const title = document.createElement("strong");
+        title.textContent = gift.nome || "Sugestão de presente";
+        const desc = document.createElement("small");
+        desc.textContent = gift.descricao || "";
+        item.append(title, desc);
+        if (gift.url) {
+          const link = document.createElement("a");
+          link.href = gift.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "Ver sugestão ↗";
+          item.appendChild(link);
+        }
+        wrap.appendChild(item);
+      });
+      if (CONTEUDO_ESPECIAL.listaPresentesURL) {
+        const link = document.createElement("a");
+        link.className = "extra-link";
+        link.href = CONTEUDO_ESPECIAL.listaPresentesURL;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Abrir lista completa de presentes";
+        wrap.appendChild(link);
+      }
+      $("giftsSection").hidden = false;
+    }
+
+    const videos = CONTEUDO_ESPECIAL.videos || [];
+    if (videos.length) {
+      videos.forEach((video) => {
+        if (!video.src) return;
+        const card = document.createElement("article");
+        card.className = "video-card";
+        const player = document.createElement("video");
+        player.src = video.src;
+        player.controls = true;
+        player.playsInline = true;
+        player.preload = "metadata";
+        player.setAttribute("aria-label", video.titulo || "Vídeo da família");
+        const title = document.createElement("strong");
+        title.textContent = video.titulo || "Um momento especial";
+        card.append(player, title);
+        $("videoGallery").appendChild(card);
+      });
+      if ($("videoGallery").children.length) $("videosSection").hidden = false;
+    }
+
+    if (CONTEUDO_ESPECIAL.musicaURL) {
+      const audio = $("backgroundMusic");
+      audio.src = CONTEUDO_ESPECIAL.musicaURL;
+      $("musicToggle").hidden = false;
+      $("musicToggle").addEventListener("click", async () => {
+        if (audio.paused) {
+          try {
+            await audio.play();
+            $("musicToggle").textContent = "♫ Pausar música";
+            $("musicToggle").setAttribute("aria-pressed", "true");
+          } catch {
+            $("musicToggle").textContent = "Não foi possível tocar";
+          }
+        } else {
+          audio.pause();
+          $("musicToggle").textContent = "♫ Tocar música";
+          $("musicToggle").setAttribute("aria-pressed", "false");
+        }
+      });
+    }
+
     $("closeLightbox").addEventListener("click", () => $("lightbox").classList.remove("open"));
     $("lightbox").addEventListener("click", (event) => {
       if (event.target === $("lightbox")) $("lightbox").classList.remove("open");
