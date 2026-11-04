@@ -196,8 +196,8 @@
   <main class="page">
     <span class="sparkle s1">✧</span><span class="sparkle s2">✦</span><span class="sparkle s3">✧</span>
     <p class="eyebrow">Um momento cheio de amor</p>
-    <h1 class="intro">Você está convidado(a)<br>para o nosso chá de fraldas</h1>
-    <p class="subintro">Uma celebração cheia de carinho está esperando por você. ♡</p>\n    
+    <h1 class="intro">Uma história de amor<br>está prestes a começar<span class="hero-baby" id="heroBaby">Samuel Felipe</span></h1>
+    <p class="subintro">E você faz parte dessa espera tão especial. ♡</p>\n    
 
     <section class="scene" aria-label="Convite em envelope">
       <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir convite">
@@ -214,6 +214,7 @@
         <p class="open-hint">Toque no envelope para abrir</p>
       </div>
     </section>
+    <div class="cinema-reveal" id="cinemaReveal" aria-live="polite"><p class="cinema-kicker">O nosso maior presente</p><strong>Samuel Felipe</strong><div class="cinema-rule" aria-hidden="true">✧</div></div>
 
     <section class="details" id="details" aria-live="polite">
       <p class="small-title">Reserve esse momento</p>
@@ -367,7 +368,7 @@
   <script>
     // PERSONALIZE SOMENTE ESTE BLOCO COM OS DADOS DO EVENTO.
     const CONVITE = {
-      nomeBebe: "Nome do bebê",
+      nomeBebe: "Samuel Felipe",
       titulo: "Chá de fraldas",
       mensagem: "Uma nova vida está chegando para encher nossos dias de amor. Queremos compartilhar esse momento tão especial com pessoas queridas. Será uma alegria ter você conosco!",
       dataTexto: "A definir",
@@ -570,6 +571,8 @@
     });
 
     const baby = CONVITE.nomeBebe && CONVITE.nomeBebe !== "Nome do bebê" ? CONVITE.nomeBebe : "Uma nova vida está chegando ♡";
+    $("heroBaby").textContent = baby;
+    $("cinemaReveal").querySelector("strong").textContent = baby;
     $("letterTitle").textContent = CONVITE.titulo;
     $("detailTitle").textContent = CONVITE.titulo;
     $("letterBaby").textContent = baby;
@@ -730,11 +733,12 @@
     function openLetter() {
       if (envelope.classList.contains("open")) return;
       envelope.classList.add("open");
-      window.setTimeout(() => $("details").classList.add("visible"), 650);
-      window.setTimeout(() => $("memories").classList.add("visible"), 900);
-      window.setTimeout(startScrollExperience, 700);
-      window.setTimeout(() => { $("quickNav").hidden = false; }, 720);
-      window.setTimeout(() => $("details").scrollIntoView({behavior:"smooth",block:"center"}), 1050);
+      window.setTimeout(() => $("cinemaReveal").classList.add("visible"), 520);
+      window.setTimeout(() => $("details").classList.add("visible"), 1150);
+      window.setTimeout(() => $("memories").classList.add("visible"), 1450);
+      window.setTimeout(startScrollExperience, 1200);
+      window.setTimeout(() => { $("quickNav").hidden = false; }, 1250);
+      window.setTimeout(() => $("details").scrollIntoView({behavior:"smooth",block:"center"}), 1850);
     }
     const progressBar=$("readingProgress"), backToTop=$("backToTop");
     function updateReadingProgress() {
